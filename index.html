@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vehicle Registration Prototype</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: #fff8f0;
+    }
+    header {
+      background: linear-gradient(to right, #ff9933, #138808);
+      color: white;
+      text-align: center;
+      padding: 15px;
+      font-size: 22px;
+      font-weight: bold;
+      width: 100%;
+      border-bottom: 5px solid #000080;
+    }
+    form {
+      background: #fff;
+      padding: 20px;
+      margin: 15px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      width: 90%;
+      max-width: 400px;
+    }
+    form h3 {
+      margin-top: 0;
+      color: #000080;
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin: 8px 0 5px;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 12px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background: #138808;
+      color: white;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+    }
+    #map {
+      height: 500px;
+      width: 100%;
+      margin-top: 15px;
+      border: 3px solid #000080;
+      border-radius: 12px;
+    }
+  </style>
+</head>
+<body>
+  <header>🚗 Vehicle Registration Portal 🇮🇳</header>
+
+  <form id="vehicleForm">
+    <h3>Register Your Vehicle</h3>
+    <label>Owner Name</label>
+    <input type="text" id="owner" required>
+
+    <label>Vehicle Number</label>
+    <input type="text" id="vehicleNo" placeholder="HR26AB1234" required>
+
+    <label>Vehicle Type</label>
+    <select id="type" required>
+      <option value="Car">Car</option>
+      <option value="Bike">Bike</option>
+      <option value="Bus">Bus</option>
+      <option value="Taxi">Taxi</option>
+      <option value="Auto">Auto</option>
+      <option value="Rickshaw">Rickshaw</option>
+    </select>
+
+    <label>Ownership</label>
+    <select id="ownership" required>
+      <option value="Private">Private</option>
+      <option value="Public">Public</option>
+    </select>
+
+    <button type="submit">Register Vehicle</button>
+  </form>
+
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    // Initialize map
+    const map = L.map('map').setView([28.6139, 77.2090], 5); // India center
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Dummy vehicle type icons (use Leaflet DivIcon)
+    const vehicleIcons = {
+      Car: "🚗", Bike: "🏍️", Bus: "🚌", Taxi: "🚕", Auto: "🛺", Rickshaw: "🚲"
+    };
+
+    // Registration form handler
+    document.getElementById("vehicleForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const owner = document.getElementById("owner").value;
+      const vehicleNo = document.getElementById("vehicleNo").value.toUpperCase();
+      const type = document.getElementById("type").value;
+      const ownership = document.getElementById("ownership").value;
+
+      // Extract state code (first 2 letters of vehicle number)
+      const stateCode = vehicleNo.substring(0,2);
+
+      // Dummy OTP Confirmation
+      alert("OTP sent to Vehicle Registration No: " + vehicleNo + "\n(Prototype Only)");
+
+      // Add marker with masked number
+      const marker = L.marker([28 + Math.random()*10, 77 + Math.random()*10]).addTo(map);
+      marker.bindPopup(
+        `<b>State:</b> ${stateCode}<br>
+         <b>Type:</b> ${vehicleIcons[type]} ${type}<br>
+         <b>Ownership:</b> ${ownership}<br>
+         <b>Owner:</b> ${owner}`
+      ).openPopup();
+    });
+  </script>
+</body>
+</html>
